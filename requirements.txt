@@ -2,3 +2,4 @@ streamlit
 geopandas
 pydeck
 pandas
+numpy
