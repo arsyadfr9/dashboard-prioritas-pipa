@@ -47,12 +47,20 @@ model_gdf = load_model_data(model)
 if model_gdf is not None and not model_gdf.empty:
     st.success(f"Memuat {len(model_gdf)} segmen pipa dari model '{model}'")
 
+    # Tentukan pusat peta secara aman
+    try:
+        center = model_gdf.representative_point().geometry.iloc[0]
+        latitude = center.y
+        longitude = center.x
+    except:
+        latitude, longitude = -6.9, 107.6  # fallback ke Bandung
+
     # Tampilkan peta pydeck
     st.pydeck_chart(pdk.Deck(
         map_style="mapbox://styles/mapbox/light-v9",
         initial_view_state=pdk.ViewState(
-            latitude=model_gdf.geometry.centroid.y.mean(),
-            longitude=model_gdf.geometry.centroid.x.mean(),
+            latitude=latitude,
+            longitude=longitude,
             zoom=13,
             pitch=0,
         ),
